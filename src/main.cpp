@@ -3,7 +3,7 @@
 #include <fstream>
 #include <random>
 
-#include <krushkhal.hpp>
+#include <kruskhal.hpp>
 #include <point.hpp>
 
 
@@ -52,10 +52,10 @@ int main(int, char**) {
 			std::generate(points.begin(), points.end(), genpoint);
 
 			// output results for each implementation
-			out_opt_heap << n << "," << timeit(krushkal_opt_heap, points) << std::endl;
-			out_opt_arr << n << "," << timeit(krushkal_opt_arr, points) << std::endl;
-			out_heap << n << "," << timeit(krushkal_heap, points) << std::endl;
-			out_arr << n << "," << timeit(krushkal_arr, points) << std::endl;
+			out_opt_heap << n << "," << timeit(kruskal_opt_heap, points) << std::endl;
+			out_opt_arr << n << "," << timeit(kruskal_opt_arr, points) << std::endl;
+			out_heap << n << "," << timeit(kruskal_heap, points) << std::endl;
+			out_arr << n << "," << timeit(kruskal_arr, points) << std::endl;
 
 		}
 	}
