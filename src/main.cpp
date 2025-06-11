@@ -8,8 +8,8 @@
 
 
 std::random_device rd;
-std::mt19937 rng(rd());
-std::uniform_real_distribution<float> dist(0.0f, 1.0f);
+std::mt19937_64 rng(rd());
+std::uniform_real_distribution<double> dist(0.0, 1.0);
 
 
 using time_unit = std::chrono::microseconds;
