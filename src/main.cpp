@@ -1,10 +1,11 @@
 #include <algorithm>
 #include <chrono>
 #include <fstream>
+#include <print>
 #include <random>
 
-#include <kruskhal.hpp>
-#include <point.hpp>
+#include <kruskal.hpp>
+#include <graph.hpp>
 
 
 std::random_device rd;
@@ -23,9 +24,10 @@ Point genpoint() {
 }
 
 
-time_unit timeit(void(fun)(const std::vector<Point>&), const std::vector<Point>& points) {
+time_unit timeit(void(fun)(const std::vector<Point>&, std::vector<Edge>&), const std::vector<Point>& points, const std::vector<Edge> edges) {
+	std::vector<Edge> edges_cp = edges;
 	auto begin = std::chrono::steady_clock::now();
-	fun(points);
+	fun(points, edges_cp);
 	auto delta = std::chrono::duration_cast<time_unit>(std::chrono::steady_clock::now() - begin);
 	return delta;
 }
@@ -45,17 +47,27 @@ int main(int, char**) {
 	std::ofstream out_arr("out_arr.csv");
 
 	for (auto n: ns) {
+		std::println("n={}", n);
 		for (int rep=0; rep<5; rep++) {
 
 			// generate n points
 			std::vector<Point> points(n);
 			std::generate(points.begin(), points.end(), genpoint);
 
+			std::vector<Edge> edges;
+			edges.reserve(n*(n-1)/2);
+
+			for (size_t i=0; i<n; i++) {
+				for (size_t j=i+1; j<n; j++) {
+					edges.emplace_back(i, j, distance(points[i], points[j]));
+				}
+			}
+
 			// output results for each implementation
-			out_opt_heap << n << "," << timeit(kruskal_opt_heap, points) << std::endl;
-			out_opt_arr << n << "," << timeit(kruskal_opt_arr, points) << std::endl;
-			out_heap << n << "," << timeit(kruskal_heap, points) << std::endl;
-			out_arr << n << "," << timeit(kruskal_arr, points) << std::endl;
+			out_opt_heap << n << "," << timeit(kruskal_opt_heap, points, edges) << std::endl;
+			out_opt_arr << n << "," << timeit(kruskal_opt_arr, points, edges) << std::endl;
+			out_heap << n << "," << timeit(kruskal_heap, points, edges) << std::endl;
+			out_arr << n << "," << timeit(kruskal_arr, points, edges) << std::endl;
 
 		}
 	}
